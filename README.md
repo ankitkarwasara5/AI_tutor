@@ -4,11 +4,9 @@ A lightning-fast AI-powered learning companion that generates personalized study
 
 ## ⚡ Key Features
 
-- **⚡ Lightning Fast**: 3-10 second content generation (6-10x faster than traditional methods)
 - **🔧 Unique Content**: Each section gets tailored, specific content
 - **💾 Perfect Persistence**: Progress and content automatically saved across sessions
 - **🔄 Regeneration**: One-click content regeneration for quality control
-- **🍎 M-Series Optimized**: Leverages Metal acceleration for efficient processing
 - **📱 Responsive Design**: Works on desktop and mobile devices
 - **🎯 Difficulty Levels**: Easy, Medium, and Hard content adaptation
 
