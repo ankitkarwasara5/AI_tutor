@@ -198,36 +198,6 @@ uvicorn main:app --reload
 - Use smaller models (phi3:mini) for acceptable performance
 - Consider using fallback templates for instant responses
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Test thoroughly
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Ollama** for providing local AI model management
-- **FastAPI** for the high-performance web framework
-- **Meta** for Llama models
-- **Alibaba** for Qwen models
-- **Microsoft** for Phi-3 models
-
-## 📧 Support
-
-If you encounter any issues or have questions:
-
-1. Check the [Troubleshooting](#-troubleshooting) section
-2. Search [existing issues](../../issues)
-3. Create a [new issue](../../issues/new) with detailed information
-
 ---
 
 **⚡ Built for speed, designed for learning, optimized for M-series Macs.**
