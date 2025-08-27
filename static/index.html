@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Learning Tutor - Speed Optimized</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="nav__brand" onclick="showPage('home-page')" style="cursor: pointer;">
+                <h2>🤖 AI Learning Tutor</h2>
+                <span class="ai-status" id="ai-status">🔄 Loading...</span>
+            </div>
+            <div class="nav__menu">
+                <button class="btn btn--outline nav__item" onclick="showPage('home-page')">🏠 Home</button>
+                <button class="btn btn--outline nav__item" onclick="showPage('settings-page')">⚙️ Settings</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <!-- Home Page - Topic Search -->
+        <div id="home-page" class="page active">
+            <div class="container">
+                <div class="hero">
+                    <h1 class="hero__title">⚡ Optimized Learning</h1>
+                    <p class="hero__subtitle"> Unique content per section</p>
+                    <div class="model-info">
+                        <p>🚀 Model: <strong id="active-model">Loading...</strong></p>
+                    </div>
+                </div>
+
+
+                <!-- Settings Quick Panel -->
+                <div class="settings-panel">
+                    <h3>⚙️ Study Settings</h3>
+                    <div class="settings-controls">
+                        <div class="setting-item">
+                            <label for="difficulty-select">📊 Difficulty:</label>
+                            <select id="difficulty-select">
+                                <option value="easy">🟢 Easy - Basic concepts</option>
+                                <option value="medium" selected>🟡 Medium - Balanced depth</option>
+                                <option value="hard">🔴 Hard - Advanced & detailed</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Topic Search -->
+                <section class="topic-search">
+                    <div class="search-container">
+                        <h2>🔍 What do you want to study?</h2>
+                        <div class="search-input-container">
+                            <input 
+                                type="text" 
+                                id="topic-search" 
+                                placeholder="Enter any topic (e.g., Transformers, Neural Networks, React...)"
+                                autocomplete="off"
+                            >
+                            <button class="btn btn--primary" onclick="generateStudyGuide()">
+                                ⚡ Create Fast Study Guide
+                            </button>
+                        </div>
+                        <p class="search-hint">⚡ <strong>Learn :</strong> Each generation with unique content!</p>
+                    </div>
+                    
+                    <div class="quick-topics">
+                        <h3>🚀 Popular Study Topics</h3>
+                        <div class="quick-topics-grid">
+                            <div class="quick-topic" onclick="selectQuickTopic('Transformers')">
+                                <span class="topic-icon">🤖</span>
+                                <span>Transformers</span>
+                            </div>
+                            <div class="quick-topic" onclick="selectQuickTopic('Machine Learning')">
+                                <span class="topic-icon">🧠</span>
+                                <span>Machine Learning</span>
+                            </div>
+                            <div class="quick-topic" onclick="selectQuickTopic('Deep Learning')">
+                                <span class="topic-icon">🔥</span>
+                                <span>Deep Learning</span>
+                            </div>
+                            <div class="quick-topic" onclick="selectQuickTopic('React Development')">
+                                <span class="topic-icon">⚛️</span>
+                                <span>React Development</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Study Guide Overview Page -->
+        <div id="study-guide-page" class="page">
+            <div class="container">
+                <div class="study-guide-header">
+                    <button class="btn btn--outline" onclick="showPage('home-page')">← Back to Home</button>
+                    <div class="guide-info">
+                        <h1 id="guide-title">Study Guide</h1>
+                        <p id="guide-overview">Speed-optimized comprehensive study guide</p>
+                        <div class="guide-meta">
+                            <span class="meta-badge" id="guide-difficulty">Medium</span>
+                            <span class="meta-badge" id="guide-time">⏱️ 2-3 hours</span>
+                            <span class="meta-badge" id="guide-sections">📚 6 sections</span>
+                            <span class="meta-badge speed-badge" id="guide-speed-info">⚡ Speed Mode</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Study Progress -->
+                <div class="study-progress">
+                    <h3>📈 Your Learning Progress</h3>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar">
+                            <div class="progress-bar__fill" id="study-progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span id="study-progress-text">0% Complete (0/6 sections)</span>
+                    </div>
+                    <p class="progress-note">⚡ Speed-optimized generation with perfect persistence</p>
+                </div>
+
+                <!-- Study Sections -->
+                <div class="study-sections">
+                    <h3>📖 Study Sections</h3>
+                    <div id="sections-container" class="sections-grid">
+                        <!-- Sections will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <div class="guide-actions">
+                    <button class="btn btn--primary" onclick="startLinearStudy()">
+                        🚀 Start Speed Study (Section 1 → 6)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Content Page -->
+        <div id="section-page" class="page">
+            <div class="container">
+                <div class="section-header">
+                    <button class="btn btn--outline" onclick="goBackToGuide()">← Back to Guide</button>
+                    <div class="section-info">
+                        <h1 id="section-title">Section Title</h1>
+                        <div class="section-meta">
+                            <span class="meta-badge" id="section-number">Section 1</span>
+                            <span class="meta-badge" id="section-time">⏱️ 30 min</span>
+                            <span class="meta-badge" id="section-difficulty">Medium</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Navigation -->
+                <div class="section-nav">
+                    <button class="btn btn--outline" id="prev-section-btn" onclick="navigateSection(-1)" disabled>
+                        ← Previous Section
+                    </button>
+                    <div class="section-progress">
+                        <span id="section-progress-text">Section 1 of 6</span>
+                    </div>
+                    <button class="btn btn--outline" id="next-section-btn" onclick="navigateSection(1)">
+                        Next Section →
+                    </button>
+                </div>
+
+                <!-- Section Content -->
+                <div class="section-content">
+                    <div class="content-container" id="section-content-container">
+                        <div class="speed-loading-message">
+                            <div class="loading-spinner speed-spinner"></div>
+                            <p>Loading content...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Actions -->
+                <div class="section-actions">
+                    <button class="btn btn--primary" onclick="markSectionComplete()" id="mark-complete-btn">
+                        ✅ Mark as Complete
+                    </button>
+                    <button class="btn btn--outline btn--regenerate" onclick="regenerateSection()">
+                        🔄 Regenerate
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settings-page" class="page">
+            <div class="container">
+                <h1>⚙️ Settings & Performance</h1>
+                
+                <div class="settings-content">
+                    <div class="settings-section">
+                        <h2>🎯 Learning Preferences</h2>
+                        <div class="form-group">
+                            <label for="default-difficulty">Default Difficulty Level:</label>
+                            <select id="default-difficulty" class="settings-select">
+                                <option value="easy">🟢 Easy - Basic concepts</option>
+                                <option value="medium" selected>🟡 Medium - Balanced complexity</option>
+                                <option value="hard">🔴 Hard - Advanced concepts</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="settings-actions">
+                        <button class="btn btn--primary" onclick="saveSettings()">
+                            ⚡ Save Settings
+                        </button>
+                        <button class="btn btn--outline" onclick="resetSettings()">
+                            🔄 Reset to Default
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner speed-spinner"></div>
+            <p id="loading-text">Loading...</p>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
