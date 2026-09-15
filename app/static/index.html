@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A local-first AI tutor that creates structured curricula, deep lessons, practice questions, and progress tracking with Ollama.">
+    <title>Local AI Learning Tutor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar__content">
+            <button class="brand" type="button" onclick="showPage('home-page')">
+                <span class="brand__mark">LT</span>
+                <span>
+                    <strong>Local AI Tutor</strong>
+                    <small>Private, local-first learning</small>
+                </span>
+            </button>
+            <div class="topbar__actions">
+                <span class="status-pill" id="ai-status">Connecting…</span>
+                <button class="button button--ghost" type="button" onclick="showPage('settings-page')">Settings</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home-page" class="page active">
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <span class="eyebrow">LOCAL AI STUDY WORKSPACE</span>
+                    <h1>Learn a topic through a real curriculum, not a generic answer.</h1>
+                    <p class="hero-copy__lead">Build a sequenced study guide, open concept-rich lessons, work through examples, test yourself, and keep progress on your own machine.</p>
+                    <div class="runtime-card">
+                        <span class="runtime-card__label">Active runtime</span>
+                        <strong id="active-model">Checking local model…</strong>
+                    </div>
+                </div>
+
+                <div class="generator-card">
+                    <label for="topic-search">What do you want to learn?</label>
+                    <input id="topic-search" type="text" placeholder="e.g. Bayesian inference, transformers, SQL optimization" autocomplete="off">
+
+                    <label for="difficulty-select">Difficulty</label>
+                    <select id="difficulty-select">
+                        <option value="easy">Easy — plain language + intuition</option>
+                        <option value="medium" selected>Medium — practical technical depth</option>
+                        <option value="hard">Hard — rigorous + edge cases</option>
+                    </select>
+
+                    <button class="button button--primary button--full" type="button" onclick="generateStudyGuide()">Create study guide</button>
+                    <p class="helper-text">Best results use a capable local Ollama model. Offline mode deliberately provides a study scaffold instead of pretending generic text is expert teaching.</p>
+                </div>
+            </div>
+
+            <div class="container quick-section">
+                <div class="section-heading">
+                    <span class="eyebrow">QUICK START</span>
+                    <h2>Try a topic</h2>
+                </div>
+                <div class="quick-grid">
+                    <button class="topic-chip" type="button" onclick="selectQuickTopic('Transformers')">Transformers</button>
+                    <button class="topic-chip" type="button" onclick="selectQuickTopic('Bayesian Statistics')">Bayesian Statistics</button>
+                    <button class="topic-chip" type="button" onclick="selectQuickTopic('System Design')">System Design</button>
+                    <button class="topic-chip" type="button" onclick="selectQuickTopic('Python Architecture')">Python Architecture</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="study-guide-page" class="page">
+            <div class="container content-shell">
+                <button class="back-link" type="button" onclick="showPage('home-page')">← New topic</button>
+                <div class="guide-header">
+                    <div>
+                        <span class="eyebrow">STUDY GUIDE</span>
+                        <h1 id="guide-title">Study Guide</h1>
+                        <p id="guide-overview"></p>
+                    </div>
+                    <button class="button button--primary" type="button" onclick="startLinearStudy()">Start learning</button>
+                </div>
+
+                <div class="meta-row">
+                    <span class="meta-pill" id="guide-difficulty">Medium</span>
+                    <span class="meta-pill" id="guide-time">3 hours</span>
+                    <span class="meta-pill" id="guide-sections">6 sections</span>
+                    <span class="meta-pill" id="guide-speed-info">Local-first</span>
+                </div>
+
+                <div id="guide-insights" class="guide-insights" hidden>
+                    <article class="insight-card">
+                        <span class="insight-card__label">PREREQUISITES</span>
+                        <ul id="guide-prerequisites"></ul>
+                    </article>
+                    <article class="insight-card">
+                        <span class="insight-card__label">BY THE END</span>
+                        <ul id="guide-outcomes"></ul>
+                    </article>
+                </div>
+
+                <div class="progress-panel">
+                    <div class="progress-panel__header">
+                        <strong>Progress</strong>
+                        <span id="study-progress-text">0% complete</span>
+                    </div>
+                    <div class="progress-track"><div id="study-progress-fill" class="progress-fill"></div></div>
+                </div>
+
+                <div id="sections-container" class="section-list"></div>
+            </div>
+        </section>
+
+        <section id="section-page" class="page">
+            <div class="container content-shell content-shell--reading">
+                <button class="back-link" type="button" onclick="goBackToGuide()">← Back to study guide</button>
+                <div class="lesson-header">
+                    <span class="eyebrow" id="section-number">SECTION</span>
+                    <h1 id="section-title">Lesson</h1>
+                    <p id="section-overview" class="lesson-header__overview"></p>
+                    <div id="section-objectives" class="objective-strip"></div>
+                    <div class="meta-row">
+                        <span class="meta-pill" id="section-difficulty">Medium</span>
+                        <span class="meta-pill" id="section-time">30 min</span>
+                        <span class="meta-pill" id="section-progress-text">1 of 6</span>
+                    </div>
+                </div>
+
+                <div id="section-content-container" class="lesson-content"></div>
+
+                <div class="lesson-actions">
+                    <button id="prev-section-btn" class="button button--ghost" type="button" onclick="navigateSection(-1)">Previous</button>
+                    <div class="lesson-actions__center">
+                        <button class="button button--ghost" type="button" onclick="regenerateSection()">Regenerate</button>
+                        <button id="mark-complete-btn" class="button button--primary" type="button" onclick="markSectionComplete()">Mark complete</button>
+                    </div>
+                    <button id="next-section-btn" class="button button--ghost" type="button" onclick="navigateSection(1)">Next</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="settings-page" class="page">
+            <div class="container settings-shell">
+                <button class="back-link" type="button" onclick="showPage('home-page')">← Back</button>
+                <span class="eyebrow">PREFERENCES</span>
+                <h1>Settings</h1>
+                <div class="settings-card">
+                    <label for="default-difficulty">Default difficulty</label>
+                    <select id="default-difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                    <div class="settings-actions">
+                        <button class="button button--primary" type="button" onclick="saveSettings()">Save settings</button>
+                        <button class="button button--ghost" type="button" onclick="resetSettings()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="loading-overlay" class="loading-overlay" aria-live="polite">
+        <div class="loading-card">
+            <div class="spinner"></div>
+            <strong id="loading-text">Working…</strong>
+            <small id="loading-subtext"></small>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
