@@ -108,8 +108,8 @@ The backend asks Ollama for JSON matching a Pydantic JSON schema and validates t
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/ankitkarwasara5/AI_tutor.git
-cd AI_tutor
+git clone https://github.com/ankitkarwasara5/local-ai-learning-tutor.git
+cd local-ai-learning-tutor
 ```
 
 ### 2. Create a virtual environment
